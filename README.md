@@ -76,7 +76,7 @@ student_management_system/
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone <https://github.com/akashvim3/SMS-website-Student-Management-System-.git>
    cd "Student management system"
    ```
 
