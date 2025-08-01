@@ -1,0 +1,321 @@
+/* Student Management System - Responsive Styles
+-------------------------------------------------- */
+
+/* Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) {
+  /* Header & Navigation */
+  .navbar-brand span {
+    display: none; /* Hide brand text on very small screens */
+  }
+  
+  .navbar-nav .nav-item .nav-link {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  /* Dashboard */
+  .stats-card {
+    margin-bottom: 1rem;
+  }
+  
+  .chart-container {
+    height: 250px !important;
+  }
+  
+  /* Tables */
+  .table-responsive {
+    border: none;
+  }
+  
+  .dataTables_length,
+  .dataTables_filter {
+    text-align: left !important;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Forms */
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  /* Student Profile */
+  .student-profile-image {
+    width: 120px;
+    height: 120px;
+  }
+  
+  /* Buttons */
+  .action-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .action-buttons .btn {
+    margin-bottom: 0.5rem;
+    width: 100%;
+  }
+  
+  /* Cards */
+  .card {
+    margin-bottom: 1rem;
+  }
+  
+  /* Modals */
+  .modal-dialog {
+    margin: 0.5rem;
+  }
+  
+  /* Footer */
+  footer.sticky-footer {
+    padding: 1rem 0;
+  }
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  /* Header & Navigation */
+  .topbar .dropdown {
+    position: static;
+  }
+  
+  .topbar .dropdown-list {
+    width: 20rem !important;
+    left: auto;
+    right: 0;
+  }
+  
+  /* Tables */
+  .dataTables_wrapper .row > div {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Student Profile */
+  .student-profile-image {
+    width: 130px;
+    height: 130px;
+  }
+  
+  /* Cards */
+  .card {
+    margin-bottom: 1rem;
+  }
+  
+  /* Charts */
+  .chart-container {
+    height: 300px !important;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  /* Sidebar */
+  .sidebar {
+    width: 12rem !important;
+  }
+  
+  .sidebar .nav-item .nav-link {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+  }
+  
+  .sidebar .nav-item .nav-link i {
+    font-size: 0.85rem;
+    margin-right: 0.25rem;
+  }
+  
+  /* Content Area */
+  .content {
+    margin-left: 12rem;
+  }
+  
+  /* Dashboard */
+  .stat-card h2 {
+    font-size: 1.5rem;
+  }
+  
+  /* Tables */
+  table.dataTable {
+    font-size: 0.9rem;
+  }
+  
+  /* Forms */
+  .form-group label {
+    font-size: 0.9rem;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  /* Dashboard */
+  .stat-card h2 {
+    font-size: 1.75rem;
+  }
+  
+  /* Tables */
+  table.dataTable thead th,
+  table.dataTable tbody td {
+    padding: 0.75rem;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  /* Dashboard */
+  .stat-card h2 {
+    font-size: 2rem;
+  }
+  
+  /* Content Area */
+  .container-fluid {
+    padding: 1.5rem 2rem;
+  }
+}
+
+/* Print Styles */
+@media print {
+  @page {
+    margin: 0.5cm;
+  }
+  
+  body {
+    padding: 0;
+    background-color: #fff !important;
+  }
+  
+  .sidebar, .topbar, .footer, .no-print, 
+  .dataTables_paginate, .dataTables_filter, 
+  .dataTables_length, .action-buttons, 
+  .btn, button {
+    display: none !important;
+  }
+  
+  .container-fluid {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .content {
+    margin-left: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #ddd;
+  }
+  
+  .card-header {
+    background-color: #f1f1f1 !important;
+  }
+  
+  .card-footer {
+    background-color: #f1f1f1 !important;
+  }
+  
+  /* Tables */
+  table.dataTable {
+    width: 100% !important;
+    border-collapse: collapse;
+  }
+  
+  table.dataTable th,
+  table.dataTable td {
+    border: 1px solid #ddd;
+    padding: 0.5rem;
+  }
+  
+  /* Student Profile */
+  .student-profile-image {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+/* Sidebar Collapsed State */
+.sidebar.toggled {
+  width: 0 !important;
+  overflow: hidden;
+}
+
+.sidebar.toggled .nav-item .nav-link {
+  text-align: center;
+  padding: 0.75rem 1rem;
+}
+
+.sidebar.toggled .nav-item .nav-link span {
+  font-size: 0.65rem;
+  display: block;
+}
+
+.sidebar.toggled .nav-item .nav-link i {
+  margin-right: 0;
+  font-size: 1rem;
+}
+
+.sidebar.toggled .sidebar-brand .sidebar-brand-text {
+  display: none;
+}
+
+body.sidebar-toggled .content {
+  margin-left: 0 !important;
+}
+
+/* Responsive Sidebar Behavior */
+@media (min-width: 768px) {
+  .sidebar.toggled {
+    width: 6.5rem !important;
+    overflow: visible;
+  }
+  
+  .sidebar.toggled .nav-item .nav-link {
+    text-align: center;
+    padding: 1rem;
+  }
+  
+  .sidebar.toggled .nav-item .nav-link span {
+    font-size: 0.65rem;
+    display: block;
+  }
+  
+  .sidebar.toggled .nav-item .nav-link i {
+    margin-right: 0;
+    font-size: 1rem;
+  }
+  
+  .sidebar.toggled .sidebar-brand .sidebar-brand-text {
+    display: none;
+  }
+  
+  body.sidebar-toggled .content {
+    margin-left: 6.5rem !important;
+  }
+}
+
+/* Dark Theme Media Query for System Preference */
+@media (prefers-color-scheme: dark) {
+  body:not([data-theme]) {
+    --body-bg: #1e2130;
+    --card-bg: #283046;
+    --card-header-bg: #222a3f;
+    --card-footer-bg: #222a3f;
+    --text-color: #e0e0e0;
+    --text-muted: #9fa6b2;
+    --border-color: #37405e;
+    --input-bg: #283046;
+    --input-border: #444b60;
+    --input-color: #e0e0e0;
+    --table-bg: #283046;
+    --table-header-bg: #222a3f;
+    --table-hover-bg: #2c3550;
+    --sidebar-bg: #283046;
+    --sidebar-text: #d0d2d6;
+    --shadow-color: rgba(0, 0, 0, 0.25);
+  }
+  
+  /* Only apply when no theme is explicitly set */
+  body:not([data-theme]) {
+    background-color: var(--body-bg);
+    color: var(--text-color);
+  }
+} 

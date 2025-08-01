@@ -1,0 +1,548 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Contact Us - Student Management System{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<style>
+    #map {
+        height: 300px;
+        width: 100%;
+        border-radius: 0.35rem;
+    }
+    .contact-info li {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: flex-start;
+    }
+    .contact-info i {
+        margin-right: 10px;
+        margin-top: 5px;
+    }
+    .chat-box {
+        height: 300px;
+        overflow-y: auto;
+        border: 1px solid #e3e6f0;
+        border-radius: 0.35rem;
+        padding: 15px;
+        margin-bottom: 15px;
+        background-color: #f8f9fc;
+    }
+    .chat-message {
+        margin-bottom: 15px;
+        padding: 10px 15px;
+        border-radius: 20px;
+        max-width: 80%;
+    }
+    .chat-message.user {
+        background-color: #4e73df;
+        color: white;
+        margin-left: auto;
+    }
+    .chat-message.support {
+        background-color: #f0f0f0;
+    }
+    .ticket-status {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.35rem;
+        font-size: 0.75rem;
+        font-weight: bold;
+    }
+    .status-open {
+        background-color: #36b9cc;
+        color: white;
+    }
+    .status-in-progress {
+        background-color: #f6c23e;
+        color: white;
+    }
+    .status-closed {
+        background-color: #1cc88a;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Main contact section -->
+    <div class="row mb-4">
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Contact Us</h6>
+                    <span><i class="fas fa-headset me-2"></i>24/7 Support Available</span>
+                </div>
+                <div class="card-body">
+                    <h2 class="mb-4">Get in Touch</h2>
+                    <p class="lead mb-5">
+                        Have questions, feedback, or need assistance with the Student Management System?
+                        Our support team is here to help. Feel free to reach out using any of our contact channels.
+                    </p>
+                    
+                    <ul class="nav nav-tabs mb-4" id="contactTabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="form-tab" data-bs-toggle="tab" href="#contactForm" role="tab" aria-controls="contactForm" aria-selected="true">
+                                <i class="fas fa-envelope me-2"></i>Contact Form
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="chat-tab" data-bs-toggle="tab" href="#liveChat" role="tab" aria-controls="liveChat" aria-selected="false">
+                                <i class="fas fa-comments me-2"></i>Live Chat
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="ticket-tab" data-bs-toggle="tab" href="#supportTicket" role="tab" aria-controls="supportTicket" aria-selected="false">
+                                <i class="fas fa-ticket-alt me-2"></i>Support Ticket
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content" id="contactTabsContent">
+                        <!-- Contact Form Tab -->
+                        <div class="tab-pane fade show active" id="contactForm" role="tabpanel" aria-labelledby="form-tab">
+                            <form id="contactFormSubmit">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="name">Full Name</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                            <input type="text" class="form-control" id="name" placeholder="Your Full Name" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email">Email Address</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                            <input type="email" class="form-control" id="email" placeholder="your.email@example.com" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="phone">Phone Number (Optional)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                            <input type="tel" class="form-control" id="phone" placeholder="(123) 456-7890">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label for="department">Department</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-building"></i></span>
+                                            <select class="form-control" id="department" required>
+                                                <option value="" selected disabled>Select Department</option>
+                                                <option value="technical">Technical Support</option>
+                                                <option value="billing">Billing & Payments</option>
+                                                <option value="academic">Academic Support</option>
+                                                <option value="general">General Inquiry</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="subject">Subject</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-tag"></i></span>
+                                        <input type="text" class="form-control" id="subject" placeholder="Brief Subject of Your Message" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="message">Message</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-comment"></i></span>
+                                        <textarea class="form-control" id="message" rows="5" placeholder="Please provide details about your inquiry..." required></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="privacyCheck" required>
+                                    <label class="form-check-label" for="privacyCheck">
+                                        I agree to the <a href="#">privacy policy</a> and consent to being contacted regarding my inquiry.
+                                    </label>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane me-2"></i>Send Message
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <!-- Live Chat Tab -->
+                        <div class="tab-pane fade" id="liveChat" role="tabpanel" aria-labelledby="chat-tab">
+                            <div class="chat-box" id="chatMessages">
+                                <div class="chat-message support">
+                                    <strong>Support Agent:</strong> Hello! How can I help you today?
+                                </div>
+                                <div class="chat-message user">
+                                    I have a question about student registration.
+                                </div>
+                                <div class="chat-message support">
+                                    <strong>Support Agent:</strong> Of course! What would you like to know about the registration process?
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="chatInput" placeholder="Type your message here...">
+                                <button class="btn btn-primary" type="button" id="sendChat">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                            <small class="text-muted mt-2">Our live chat support is available Monday-Friday, 8AM-8PM EST.</small>
+                        </div>
+                        
+                        <!-- Support Ticket Tab -->
+                        <div class="tab-pane fade" id="supportTicket" role="tabpanel" aria-labelledby="ticket-tab">
+                            <div class="alert alert-info mb-4">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Submit a support ticket for complex issues that require ongoing assistance.
+                                Our support team typically responds within 24 hours.
+                            </div>
+                            
+                            <form id="ticketForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="ticketEmail">Email Address</label>
+                                        <input type="email" class="form-control" id="ticketEmail" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="ticketPriority">Priority</label>
+                                        <select class="form-control" id="ticketPriority" required>
+                                            <option value="low">Low</option>
+                                            <option value="medium" selected>Medium</option>
+                                            <option value="high">High</option>
+                                            <option value="urgent">Urgent</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="ticketIssue">Issue Category</label>
+                                    <select class="form-control" id="ticketIssue" required>
+                                        <option value="" selected disabled>Select Issue Category</option>
+                                        <option value="login">Login Problems</option>
+                                        <option value="data">Data Management</option>
+                                        <option value="reports">Reports & Analytics</option>
+                                        <option value="feature">Feature Request</option>
+                                        <option value="bug">Bug Report</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="ticketDescription">Description</label>
+                                    <textarea class="form-control" id="ticketDescription" rows="4" required></textarea>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="fileAttachment">Attachments (Optional)</label>
+                                    <input type="file" class="form-control" id="fileAttachment" multiple>
+                                    <small class="form-text text-muted">You can attach screenshots or relevant files (max 5MB per file).</small>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-ticket-alt me-2"></i>Submit Ticket
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Contact Information</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="contact-info list-unstyled">
+                        <li>
+                            <i class="fas fa-map-marker-alt text-primary"></i>
+                            <div>
+                                <strong>Address:</strong><br>
+                                123 Education St,<br>
+                                Learning City, LC 12345
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-phone text-primary"></i>
+                            <div>
+                                <strong>Phone:</strong><br>
+                                Main: +1 (123) 456-7890<br>
+                                Support: +1 (123) 456-7891
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-envelope text-primary"></i>
+                            <div>
+                                <strong>Email:</strong><br>
+                                General: info@sms-edu.com<br>
+                                Support: support@sms-edu.com
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-clock text-primary"></i>
+                            <div>
+                                <strong>Hours:</strong><br>
+                                Monday-Friday: 9:00 AM - 5:00 PM<br>
+                                Weekend: Closed
+                            </div>
+                        </li>
+                    </ul>
+                    
+                    <div class="social-links mt-4 text-center">
+                        <a href="#" class="btn btn-outline-primary btn-circle me-2">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-info btn-circle me-2">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-danger btn-circle me-2">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-primary btn-circle">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Map Section -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Find Us</h6>
+                </div>
+                <div class="card-body">
+                    <div id="map"></div>
+                    <div class="mt-3">
+                        <button class="btn btn-sm btn-primary" id="getDirections">
+                            <i class="fas fa-directions me-2"></i>Get Directions
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Support Tickets -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Your Recent Support Tickets</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Ticket ID</th>
+                                    <th>Subject</th>
+                                    <th>Department</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#123456</td>
+                                    <td>Login Issue with Student Portal</td>
+                                    <td>Technical Support</td>
+                                    <td>May 10, 2023</td>
+                                    <td><span class="ticket-status status-closed">Closed</span></td>
+                                    <td><a href="#" class="btn btn-sm btn-primary">View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>#123457</td>
+                                    <td>Question about Course Registration</td>
+                                    <td>Academic Support</td>
+                                    <td>May 15, 2023</td>
+                                    <td><span class="ticket-status status-in-progress">In Progress</span></td>
+                                    <td><a href="#" class="btn btn-sm btn-primary">View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>#123458</td>
+                                    <td>Feature Request: Mobile App</td>
+                                    <td>General Inquiry</td>
+                                    <td>May 20, 2023</td>
+                                    <td><span class="ticket-status status-open">Open</span></td>
+                                    <td><a href="#" class="btn btn-sm btn-primary">View</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="#" class="btn btn-outline-primary">View All Tickets</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section (improved with more questions) -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Frequently Asked Questions</h6>
+                    <a href="#" class="btn btn-sm btn-primary">View All FAQs</a>
+                </div>
+                <div class="card-body">
+                    <div class="accordion" id="faqAccordion">
+                        <!-- First 3 FAQs (existing) -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faqHeading1">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse1" aria-expanded="true" aria-controls="faqCollapse1">
+                                    How do I reset my password?
+                                </button>
+                            </h2>
+                            <div id="faqCollapse1" class="accordion-collapse collapse show" aria-labelledby="faqHeading1" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    You can reset your password by clicking on the "Forgot Password" link on the login page. You will receive an email with instructions to reset your password.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faqHeading2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse2" aria-expanded="false" aria-controls="faqCollapse2">
+                                    How do I update my contact information?
+                                </button>
+                            </h2>
+                            <div id="faqCollapse2" class="accordion-collapse collapse" aria-labelledby="faqHeading2" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    You can update your contact information by going to your profile page. Click on your username in the top-right corner, select "Profile," and then "Edit Profile."
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faqHeading3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse3" aria-expanded="false" aria-controls="faqCollapse3">
+                                    How do I view my academic records?
+                                </button>
+                            </h2>
+                            <div id="faqCollapse3" class="accordion-collapse collapse" aria-labelledby="faqHeading3" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Students can view their academic records by logging in and navigating to the "Academics" section. There, you'll find options to view grades, attendance, and course details.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Additional FAQs -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faqHeading4">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse4" aria-expanded="false" aria-controls="faqCollapse4">
+                                    How can I download my grade report?
+                                </button>
+                            </h2>
+                            <div id="faqCollapse4" class="accordion-collapse collapse" aria-labelledby="faqHeading4" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    You can download your grade report by navigating to your Dashboard > Academics > Grade Reports. Click on the semester you want to view, then use the "Download PDF" button to save or print your report.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faqHeading5">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse5" aria-expanded="false" aria-controls="faqCollapse5">
+                                    Is there a mobile app available for the Student Management System?
+                                </button>
+                            </h2>
+                            <div id="faqCollapse5" class="accordion-collapse collapse" aria-labelledby="faqHeading5" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Yes! We have mobile apps available for both iOS and Android platforms. Search for "SMS Education" in your app store or visit our website's download section for direct links.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    // Map initialization
+    document.addEventListener('DOMContentLoaded', function() {
+        // Contact form submission
+        document.getElementById('contactFormSubmit').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for contacting us! We will respond to your message as soon as possible.');
+            this.reset();
+        });
+        
+        // Ticket form submission
+        document.getElementById('ticketForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Your support ticket has been submitted! You will receive a confirmation email with your ticket ID.');
+            this.reset();
+        });
+        
+        // Chat functionality
+        document.getElementById('sendChat').addEventListener('click', function() {
+            const chatInput = document.getElementById('chatInput');
+            const chatMessages = document.getElementById('chatMessages');
+            
+            if (chatInput.value.trim() !== '') {
+                // Add user message
+                const userMessage = document.createElement('div');
+                userMessage.className = 'chat-message user';
+                userMessage.textContent = chatInput.value;
+                chatMessages.appendChild(userMessage);
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Clear input
+                chatInput.value = '';
+                
+                // Simulate reply after 1 second
+                setTimeout(function() {
+                    const supportMessage = document.createElement('div');
+                    supportMessage.className = 'chat-message support';
+                    supportMessage.innerHTML = '<strong>Support Agent:</strong> Thank you for your message. A support representative will assist you shortly.';
+                    chatMessages.appendChild(supportMessage);
+                    
+                    // Scroll to bottom again
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1000);
+            }
+        });
+        
+        // Allow sending chat on Enter key
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('sendChat').click();
+            }
+        });
+        
+        // Initialize map
+        const map = L.map('map').setView([40.7128, -74.0060], 13);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        const marker = L.marker([40.7128, -74.0060]).addTo(map)
+            .bindPopup('Student Management System<br>123 Education St')
+            .openPopup();
+            
+        document.getElementById('getDirections').addEventListener('click', function() {
+            window.open(`https://www.google.com/maps/dir/?api=1&destination=40.7128,-74.0060`, '_blank');
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %} 

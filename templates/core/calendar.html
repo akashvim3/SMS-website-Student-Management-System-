@@ -1,0 +1,505 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Academic Calendar - Student Management System{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css">
+<style>
+    .fc-event {
+        cursor: pointer;
+        padding: 5px;
+    }
+    .fc-day-today {
+        background-color: rgba(78, 115, 223, 0.1) !important;
+    }
+    .fc-daygrid-day-number,
+    .fc-col-header-cell-cushion {
+        color: #5a5c69;
+        text-decoration: none !important;
+    }
+    .event-tooltip {
+        position: absolute;
+        z-index: 10001;
+        background: #fff;
+        border-radius: 5px;
+        padding: 15px;
+        max-width: 300px;
+        box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        border: 1px solid rgba(0,0,0,0.1);
+    }
+    .event-tooltip h5 {
+        margin-bottom: 5px;
+        color: #4e73df;
+    }
+    .filter-btn.active {
+        background-color: #4e73df;
+        color: white;
+    }
+    .category-badge {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        font-weight: bold;
+        border-radius: 0.35rem;
+        margin-right: 5px;
+    }
+    .badge-exam {
+        background-color: #e74a3b;
+        color: white;
+    }
+    .badge-holiday {
+        background-color: #1cc88a;
+        color: white;
+    }
+    .badge-event {
+        background-color: #f6c23e;
+        color: white;
+    }
+    .badge-deadline {
+        background-color: #4e73df;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Page Title and Description -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Academic Calendar</h1>
+        <div>
+            <button class="btn btn-sm btn-outline-primary me-2" id="printCalendar">
+                <i class="fas fa-print me-2"></i>Print
+            </button>
+            <button class="btn btn-sm btn-outline-success" id="exportCalendar">
+                <i class="fas fa-file-export me-2"></i>Export to iCal
+            </button>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Calendar Overview</h6>
+                </div>
+                <div class="card-body">
+                    <p>This calendar displays all academic dates, events, and deadlines for the current academic year. Use the filters below to customize your view.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Sidebar for filters and upcoming events -->
+        <div class="col-lg-3">
+            <!-- Filters -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Filters</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Event Categories</strong></label>
+                        <div class="d-flex flex-wrap">
+                            <button class="btn btn-sm btn-outline-danger m-1 filter-btn active" data-category="exam">
+                                <i class="fas fa-book me-1"></i>Exams
+                            </button>
+                            <button class="btn btn-sm btn-outline-success m-1 filter-btn active" data-category="holiday">
+                                <i class="fas fa-umbrella-beach me-1"></i>Holidays
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning m-1 filter-btn active" data-category="event">
+                                <i class="fas fa-calendar-day me-1"></i>Events
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary m-1 filter-btn active" data-category="deadline">
+                                <i class="fas fa-clock me-1"></i>Deadlines
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Academic Year</strong></label>
+                        <select class="form-select" id="yearSelect">
+                            <option value="2023-2024" selected>2023-2024</option>
+                            <option value="2022-2023">2022-2023</option>
+                            <option value="2021-2022">2021-2022</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Department</strong></label>
+                        <select class="form-select" id="departmentSelect">
+                            <option value="all" selected>All Departments</option>
+                            <option value="science">Science</option>
+                            <option value="arts">Arts & Humanities</option>
+                            <option value="business">Business</option>
+                            <option value="engineering">Engineering</option>
+                        </select>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button class="btn btn-primary" id="resetFilters">
+                            <i class="fas fa-sync-alt me-2"></i>Reset Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Upcoming Events -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Upcoming Events</h6>
+                    <span class="badge bg-primary">Next 7 Days</span>
+                </div>
+                <div class="card-body">
+                    <div id="upcomingEvents">
+                        <!-- Event items will be loaded dynamically -->
+                        <div class="event-item mb-3 pb-3 border-bottom">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <span class="category-badge badge-exam">Exam</span>
+                                    <h6 class="mb-1">Final Mathematics Exam</h6>
+                                </div>
+                                <small class="text-muted">Tomorrow</small>
+                            </div>
+                            <p class="small mb-1">9:00 AM - 12:00 PM</p>
+                            <p class="small text-muted mb-0">Main Hall, Building A</p>
+                        </div>
+                        
+                        <div class="event-item mb-3 pb-3 border-bottom">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <span class="category-badge badge-deadline">Deadline</span>
+                                    <h6 class="mb-1">Project Submission</h6>
+                                </div>
+                                <small class="text-muted">In 3 days</small>
+                            </div>
+                            <p class="small mb-1">11:59 PM</p>
+                            <p class="small text-muted mb-0">Online Submission Portal</p>
+                        </div>
+                        
+                        <div class="event-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <span class="category-badge badge-event">Event</span>
+                                    <h6 class="mb-1">Student Orientation</h6>
+                                </div>
+                                <small class="text-muted">In 5 days</small>
+                            </div>
+                            <p class="small mb-1">10:00 AM - 2:00 PM</p>
+                            <p class="small text-muted mb-0">Auditorium, Building B</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="#" class="btn btn-sm btn-outline-primary">View All Events</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Calendar -->
+        <div class="col-lg-9">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="m-0 font-weight-bold text-primary">Academic Schedule</h6>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-outline-primary" id="monthView">Month</button>
+                            <button class="btn btn-sm btn-outline-primary" id="weekView">Week</button>
+                            <button class="btn btn-sm btn-outline-primary" id="dayView">Day</button>
+                            <button class="btn btn-sm btn-outline-primary" id="listView">List</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="calendar"></div>
+                </div>
+            </div>
+            
+            <!-- Event Details Modal -->
+            <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="eventModalLabel">Event Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="eventCategory" class="mb-2"></div>
+                            <h4 id="eventTitle" class="mb-3"></h4>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="d-flex">
+                                        <i class="fas fa-calendar-alt text-primary me-2 mt-1"></i>
+                                        <div>
+                                            <strong>Date</strong>
+                                            <p id="eventDate" class="mb-0"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex">
+                                        <i class="fas fa-clock text-primary me-2 mt-1"></i>
+                                        <div>
+                                            <strong>Time</strong>
+                                            <p id="eventTime" class="mb-0"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex mb-3">
+                                <i class="fas fa-map-marker-alt text-primary me-2 mt-1"></i>
+                                <div>
+                                    <strong>Location</strong>
+                                    <p id="eventLocation" class="mb-0"></p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex mb-3">
+                                <i class="fas fa-align-left text-primary me-2 mt-1"></i>
+                                <div>
+                                    <strong>Description</strong>
+                                    <p id="eventDescription" class="mb-0"></p>
+                                </div>
+                            </div>
+                            
+                            <div id="eventExtras"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="addToCalendar">
+                                <i class="fas fa-calendar-plus me-2"></i>Add to My Calendar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sample event data - would be loaded from backend in real application
+        const events = [
+            {
+                id: '1',
+                title: 'Final Mathematics Exam',
+                start: '2023-05-15T09:00:00',
+                end: '2023-05-15T12:00:00',
+                category: 'exam',
+                location: 'Main Hall, Building A',
+                description: 'Final examination for Mathematics 101. Bring calculators and required stationary.',
+                color: '#e74a3b'
+            },
+            {
+                id: '2',
+                title: 'Project Submission Deadline',
+                start: '2023-05-18T23:59:00',
+                allDay: false,
+                category: 'deadline',
+                location: 'Online Submission Portal',
+                description: 'Final deadline for term project submissions. No extensions will be granted.',
+                color: '#4e73df'
+            },
+            {
+                id: '3',
+                title: 'Student Orientation',
+                start: '2023-05-20T10:00:00',
+                end: '2023-05-20T14:00:00',
+                category: 'event',
+                location: 'Auditorium, Building B',
+                description: 'Orientation program for new students. Attendance is mandatory.',
+                color: '#f6c23e'
+            },
+            {
+                id: '4',
+                title: 'Summer Break Begins',
+                start: '2023-06-15',
+                allDay: true,
+                category: 'holiday',
+                location: 'All Campuses',
+                description: 'Beginning of summer break. All classes suspended until August 15.',
+                color: '#1cc88a'
+            },
+            {
+                id: '5',
+                title: 'Science Exhibition',
+                start: '2023-05-25',
+                end: '2023-05-27',
+                category: 'event',
+                location: 'Science Building',
+                description: 'Annual science exhibition showcasing student projects and research work.',
+                color: '#f6c23e'
+            },
+            {
+                id: '6',
+                title: 'English Literature Exam',
+                start: '2023-05-22T14:00:00',
+                end: '2023-05-22T16:00:00',
+                category: 'exam',
+                location: 'Room 105, Building C',
+                description: 'Final examination for English Literature. Open book exam.',
+                color: '#e74a3b'
+            }
+        ];
+        
+        // Initialize the calendar
+        const calendarEl = document.getElementById('calendar');
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: ''
+            },
+            events: events,
+            eventClick: function(info) {
+                // Populate modal with event details
+                document.getElementById('eventTitle').textContent = info.event.title;
+                
+                const categoryMap = {
+                    'exam': { text: 'Exam', class: 'badge-exam' },
+                    'holiday': { text: 'Holiday', class: 'badge-holiday' },
+                    'event': { text: 'Event', class: 'badge-event' },
+                    'deadline': { text: 'Deadline', class: 'badge-deadline' }
+                };
+                
+                const category = info.event.extendedProps.category;
+                const categoryHTML = `<span class="category-badge ${categoryMap[category].class}">${categoryMap[category].text}</span>`;
+                document.getElementById('eventCategory').innerHTML = categoryHTML;
+                
+                // Format date
+                const startDate = info.event.start;
+                const endDate = info.event.end;
+                let dateStr = startDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+                
+                if (endDate && !info.event.allDay) {
+                    dateStr = `${startDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })} - 
+                               ${endDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}`;
+                }
+                document.getElementById('eventDate').textContent = dateStr;
+                
+                // Format time
+                let timeStr = 'All Day';
+                if (!info.event.allDay) {
+                    const startTime = startDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                    if (endDate) {
+                        const endTime = endDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                        timeStr = `${startTime} - ${endTime}`;
+                    } else {
+                        timeStr = startTime;
+                    }
+                }
+                document.getElementById('eventTime').textContent = timeStr;
+                
+                // Set location and description
+                document.getElementById('eventLocation').textContent = info.event.extendedProps.location || 'N/A';
+                document.getElementById('eventDescription').textContent = info.event.extendedProps.description || 'No description available';
+                
+                // Show the modal
+                const eventModal = new bootstrap.Modal(document.getElementById('eventModal'));
+                eventModal.show();
+            },
+            dayMaxEvents: true, // Allow "more" link when too many events
+            eventTimeFormat: {
+                hour: '2-digit',
+                minute: '2-digit',
+                meridiem: 'short'
+            }
+        });
+        
+        calendar.render();
+        
+        // Handle view changes
+        document.getElementById('monthView').addEventListener('click', function() {
+            calendar.changeView('dayGridMonth');
+            setActiveButton(this);
+        });
+        
+        document.getElementById('weekView').addEventListener('click', function() {
+            calendar.changeView('timeGridWeek');
+            setActiveButton(this);
+        });
+        
+        document.getElementById('dayView').addEventListener('click', function() {
+            calendar.changeView('timeGridDay');
+            setActiveButton(this);
+        });
+        
+        document.getElementById('listView').addEventListener('click', function() {
+            calendar.changeView('listMonth');
+            setActiveButton(this);
+        });
+        
+        function setActiveButton(button) {
+            document.querySelectorAll('.btn-group .btn').forEach(btn => {
+                btn.classList.remove('active', 'btn-primary');
+                btn.classList.add('btn-outline-primary');
+            });
+            button.classList.remove('btn-outline-primary');
+            button.classList.add('active', 'btn-primary');
+        }
+        
+        // Handle filters
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                this.classList.toggle('active');
+                
+                // Get all active categories
+                const activeCategories = [];
+                document.querySelectorAll('.filter-btn.active').forEach(btn => {
+                    activeCategories.push(btn.dataset.category);
+                });
+                
+                // Filter events
+                calendar.getEvents().forEach(event => {
+                    if (activeCategories.includes(event.extendedProps.category)) {
+                        event.setProp('display', 'auto');
+                    } else {
+                        event.setProp('display', 'none');
+                    }
+                });
+            });
+        });
+        
+        // Reset filters
+        document.getElementById('resetFilters').addEventListener('click', function() {
+            filterButtons.forEach(button => {
+                button.classList.add('active');
+            });
+            
+            calendar.getEvents().forEach(event => {
+                event.setProp('display', 'auto');
+            });
+            
+            document.getElementById('yearSelect').value = '2023-2024';
+            document.getElementById('departmentSelect').value = 'all';
+        });
+        
+        // Print calendar
+        document.getElementById('printCalendar').addEventListener('click', function() {
+            window.print();
+        });
+        
+        // Export to iCal - This would be handled by backend in real application
+        document.getElementById('exportCalendar').addEventListener('click', function() {
+            alert('Calendar export functionality would be implemented in the backend');
+        });
+        
+        // Add to calendar - This would be handled by backend in real application
+        document.getElementById('addToCalendar').addEventListener('click', function() {
+            alert('Event has been added to your personal calendar');
+            const eventModal = bootstrap.Modal.getInstance(document.getElementById('eventModal'));
+            eventModal.hide();
+        });
+    });
+</script>
+{% endblock %} 

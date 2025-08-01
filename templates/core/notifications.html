@@ -1,0 +1,458 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Notifications - Student Management System{% endblock %}
+
+{% block extra_css %}
+<style>
+    .notification-item {
+        border-left: 4px solid #4e73df;
+        transition: all 0.3s;
+    }
+    .notification-item:hover {
+        background-color: rgba(78, 115, 223, 0.05);
+    }
+    .notification-item.unread {
+        background-color: rgba(78, 115, 223, 0.1);
+    }
+    .notification-item.success {
+        border-left-color: #1cc88a;
+    }
+    .notification-item.danger {
+        border-left-color: #e74a3b;
+    }
+    .notification-item.warning {
+        border-left-color: #f6c23e;
+    }
+    .notification-item.info {
+        border-left-color: #36b9cc;
+    }
+    .notification-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+    }
+    .icon-primary {
+        background-color: rgba(78, 115, 223, 0.2);
+        color: #4e73df;
+    }
+    .icon-success {
+        background-color: rgba(28, 200, 138, 0.2);
+        color: #1cc88a;
+    }
+    .icon-danger {
+        background-color: rgba(231, 74, 59, 0.2);
+        color: #e74a3b;
+    }
+    .icon-warning {
+        background-color: rgba(246, 194, 62, 0.2);
+        color: #f6c23e;
+    }
+    .icon-info {
+        background-color: rgba(54, 185, 204, 0.2);
+        color: #36b9cc;
+    }
+    .notification-badge {
+        font-size: 0.65rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Page Header -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Notifications</h1>
+        <div>
+            <button class="btn btn-sm btn-outline-primary me-2" id="markAllRead">
+                <i class="fas fa-check-double me-1"></i>Mark All as Read
+            </button>
+            <div class="btn-group">
+                <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-filter me-1"></i>Filter
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item active" href="#">All Notifications</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Unread Only</a></li>
+                    <li><a class="dropdown-item" href="#">Academic</a></li>
+                    <li><a class="dropdown-item" href="#">Administrative</a></li>
+                    <li><a class="dropdown-item" href="#">System</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Counter Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Notifications</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">26</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-bell fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Unread</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">8</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-envelope fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Academic</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">14</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-graduation-cap fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                System</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">12</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-cogs fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications List -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Recent Notifications</h6>
+            <span class="badge bg-primary">Today</span>
+        </div>
+        <div class="card-body p-0">
+            <!-- Notification Item: Unread -->
+            <div class="notification-item unread p-3 border-bottom">
+                <div class="d-flex">
+                    <div class="notification-icon icon-primary">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between mb-1">
+                            <h6 class="mb-0">New Course Registration Open</h6>
+                            <small class="text-muted">2 hours ago</small>
+                        </div>
+                        <p class="mb-1">Fall semester course registration is now open. Please register by July 15.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-primary notification-badge">Academic</span>
+                                <span class="badge bg-secondary notification-badge">Registration</span>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-link text-primary p-0 me-2">Mark as Read</button>
+                                <button class="btn btn-sm btn-link text-danger p-0">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Item: Warning -->
+            <div class="notification-item warning unread p-3 border-bottom">
+                <div class="d-flex">
+                    <div class="notification-icon icon-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between mb-1">
+                            <h6 class="mb-0">Fee Payment Reminder</h6>
+                            <small class="text-muted">5 hours ago</small>
+                        </div>
+                        <p class="mb-1">This is a reminder that your tuition fee payment is due in 5 days. Late payments will incur an additional charge.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-warning text-dark notification-badge">Finance</span>
+                                <span class="badge bg-secondary notification-badge">Payment</span>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-link text-primary p-0 me-2">Mark as Read</button>
+                                <button class="btn btn-sm btn-link text-danger p-0">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Item: Success -->
+            <div class="notification-item success p-3 border-bottom">
+                <div class="d-flex">
+                    <div class="notification-icon icon-success">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between mb-1">
+                            <h6 class="mb-0">Assignment Graded</h6>
+                            <small class="text-muted">Yesterday</small>
+                        </div>
+                        <p class="mb-1">Your Programming Fundamentals assignment has been graded. You scored 92/100.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-success notification-badge">Grades</span>
+                                <span class="badge bg-secondary notification-badge">Assignment</span>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-link text-primary p-0 me-2">Mark as Unread</button>
+                                <button class="btn btn-sm btn-link text-danger p-0">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Item: Info -->
+            <div class="notification-item info p-3 border-bottom">
+                <div class="d-flex">
+                    <div class="notification-icon icon-info">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between mb-1">
+                            <h6 class="mb-0">Library Book Due Date</h6>
+                            <small class="text-muted">2 days ago</small>
+                        </div>
+                        <p class="mb-1">The book "Data Structures and Algorithms" is due for return in 3 days. Please return it on time to avoid late fees.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-info notification-badge">Library</span>
+                                <span class="badge bg-secondary notification-badge">Due Date</span>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-link text-primary p-0 me-2">Mark as Unread</button>
+                                <button class="btn btn-sm btn-link text-danger p-0">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Item: Danger -->
+            <div class="notification-item danger p-3 border-bottom">
+                <div class="d-flex">
+                    <div class="notification-icon icon-danger">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between mb-1">
+                            <h6 class="mb-0">Class Cancelled</h6>
+                            <small class="text-muted">3 days ago</small>
+                        </div>
+                        <p class="mb-1">The Database Systems class scheduled for tomorrow has been cancelled due to instructor illness. A makeup class will be scheduled.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-danger notification-badge">Schedule</span>
+                                <span class="badge bg-secondary notification-badge">Cancellation</span>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-link text-primary p-0 me-2">Mark as Unread</button>
+                                <button class="btn btn-sm btn-link text-danger p-0">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notification Item: Primary -->
+            <div class="notification-item p-3 border-bottom">
+                <div class="d-flex">
+                    <div class="notification-icon icon-primary">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between mb-1">
+                            <h6 class="mb-0">System Maintenance Notice</h6>
+                            <small class="text-muted">1 week ago</small>
+                        </div>
+                        <p class="mb-1">The Student Management System will be undergoing maintenance this weekend. The system will be unavailable from Friday 8 PM to Saturday 6 AM.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-primary notification-badge">System</span>
+                                <span class="badge bg-secondary notification-badge">Maintenance</span>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-link text-primary p-0 me-2">Mark as Unread</button>
+                                <button class="btn btn-sm btn-link text-danger p-0">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-center py-3">
+            <button class="btn btn-outline-primary">Load More</button>
+        </div>
+    </div>
+
+    <!-- Notification Settings Card -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Notification Settings</h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h5>Email Notifications</h5>
+                    <div class="mb-3 form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="emailAll" checked>
+                        <label class="form-check-label" for="emailAll">Receive all notifications via email</label>
+                    </div>
+                    <div class="mb-3 form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="emailGrades" checked>
+                        <label class="form-check-label" for="emailGrades">Grade updates</label>
+                    </div>
+                    <div class="mb-3 form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="emailSchedule" checked>
+                        <label class="form-check-label" for="emailSchedule">Schedule changes</label>
+                    </div>
+                    <div class="mb-3 form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="emailAnnouncements">
+                        <label class="form-check-label" for="emailAnnouncements">General announcements</label>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h5>Push Notifications</h5>
+                    <div class="mb-3 form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="pushAll" checked>
+                        <label class="form-check-label" for="pushAll">Receive all push notifications</label>
+                    </div>
+                    <div class="mb-3 form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="pushGrades" checked>
+                        <label class="form-check-label" for="pushGrades">Grade updates</label>
+                    </div>
+                    <div class="mb-3 form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="pushDeadlines" checked>
+                        <label class="form-check-label" for="pushDeadlines">Assignment deadlines</label>
+                    </div>
+                    <div class="mb-3 form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="pushSystem">
+                        <label class="form-check-label" for="pushSystem">System notifications</label>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <button class="btn btn-primary">Save Settings</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mark all as read button
+        document.getElementById('markAllRead').addEventListener('click', function() {
+            document.querySelectorAll('.notification-item.unread').forEach(item => {
+                item.classList.remove('unread');
+            });
+            
+            document.querySelector('.card-header .badge').textContent = '0 Unread';
+            document.querySelector('.card.border-left-success .h5').textContent = '0';
+            
+            alert('All notifications marked as read');
+        });
+        
+        // Individual mark as read/unread buttons
+        document.querySelectorAll('.btn-link.text-primary').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const notificationItem = this.closest('.notification-item');
+                
+                if (notificationItem.classList.contains('unread')) {
+                    notificationItem.classList.remove('unread');
+                    this.textContent = 'Mark as Unread';
+                    
+                    // Update unread count (in a real app, this would be handled by the backend)
+                    const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+                    document.querySelector('.card.border-left-success .h5').textContent = unreadCount;
+                } else {
+                    notificationItem.classList.add('unread');
+                    this.textContent = 'Mark as Read';
+                    
+                    // Update unread count
+                    const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+                    document.querySelector('.card.border-left-success .h5').textContent = unreadCount;
+                }
+            });
+        });
+        
+        // Delete notification buttons
+        document.querySelectorAll('.btn-link.text-danger').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const notificationItem = this.closest('.notification-item');
+                
+                if (confirm('Are you sure you want to delete this notification?')) {
+                    notificationItem.style.height = notificationItem.offsetHeight + 'px';
+                    notificationItem.style.overflow = 'hidden';
+                    
+                    setTimeout(() => {
+                        notificationItem.style.height = '0px';
+                        notificationItem.style.padding = '0';
+                        notificationItem.style.margin = '0';
+                        
+                        setTimeout(() => {
+                            notificationItem.remove();
+                            
+                            // Update total count
+                            const totalCount = document.querySelectorAll('.notification-item').length;
+                            document.querySelector('.card.border-left-primary .h5').textContent = totalCount;
+                            
+                            // Update unread count if applicable
+                            if (notificationItem.classList.contains('unread')) {
+                                const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+                                document.querySelector('.card.border-left-success .h5').textContent = unreadCount;
+                            }
+                        }, 300);
+                    }, 10);
+                }
+            });
+        });
+    });
+</script>
+{% endblock %} 

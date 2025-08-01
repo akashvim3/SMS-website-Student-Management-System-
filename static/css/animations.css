@@ -1,0 +1,254 @@
+/* Student Management System - Animations
+-------------------------------------------------- */
+
+/* Fade In Animation */
+.fade-in {
+  animation: fadeIn 0.5s ease-in forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Fade In Up Animation */
+.fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Fade In Left Animation */
+.fade-in-left {
+  animation: fadeInLeft 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Fade In Right Animation */
+.fade-in-right {
+  animation: fadeInRight 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Scale In Animation */
+.scale-in {
+  animation: scaleIn 0.5s ease-out forwards;
+  transform-origin: center;
+  opacity: 0;
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Bounce Animation */
+.bounce {
+  animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Pulse Animation */
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Shake Animation */
+.shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Spin Animation */
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Blink Animation */
+.blink {
+  animation: blink 1s linear infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Slide In Down Animation (for dropdowns) */
+.slide-in-down {
+  animation: slideInDown 0.3s ease-out forwards;
+  transform-origin: top center;
+}
+
+@keyframes slideInDown {
+  from { opacity: 0; transform: scaleY(0); }
+  to { opacity: 1; transform: scaleY(1); }
+}
+
+/* Slide In Left Animation (for sidebars) */
+.slide-in-left {
+  animation: slideInLeft 0.3s ease-out forwards;
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+/* Slide In Right Animation (for sidebars) */
+.slide-in-right {
+  animation: slideInRight 0.3s ease-out forwards;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+/* Progress Bar Animation */
+.progress-bar-animated {
+  animation: progressAnimation 1s linear infinite;
+  background-size: 15px 15px;
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.15) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.15) 75%,
+    transparent 75%,
+    transparent
+  );
+}
+
+@keyframes progressAnimation {
+  from { background-position: 0 0; }
+  to { background-position: 15px 0; }
+}
+
+/* Typing Cursor Animation */
+.typing::after {
+  content: '|';
+  animation: blink 1s step-end infinite;
+}
+
+/* Float Animation */
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Zoom In Animation */
+.zoom-in {
+  animation: zoomIn 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Zoom Out Animation */
+.zoom-out {
+  animation: zoomOut 0.5s ease-out forwards;
+}
+
+@keyframes zoomOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.8); }
+}
+
+/* Flip Animation */
+.flip {
+  animation: flip 0.6s ease-out;
+  backface-visibility: visible;
+}
+
+@keyframes flip {
+  0% { transform: perspective(400px) rotateY(0); }
+  40% { transform: perspective(400px) rotateY(170deg); }
+  50% { transform: perspective(400px) rotateY(190deg); }
+  100% { transform: perspective(400px) rotateY(360deg); }
+}
+
+/* Heartbeat Animation */
+.heartbeat {
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  14% { transform: scale(1.1); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.1); }
+  70% { transform: scale(1); }
+}
+
+/* Staggered Delay Helper Classes */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-600 { animation-delay: 0.6s; }
+.delay-700 { animation-delay: 0.7s; }
+.delay-800 { animation-delay: 0.8s; }
+.delay-900 { animation-delay: 0.9s; }
+.delay-1000 { animation-delay: 1s; }
+
+/* Animation Speed Helper Classes */
+.speed-slow { animation-duration: 2s; }
+.speed-normal { animation-duration: 1s; }
+.speed-fast { animation-duration: 0.5s; }
+.speed-very-fast { animation-duration: 0.3s; }
+
+/* Utility class to pause animations when preferred */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+} 

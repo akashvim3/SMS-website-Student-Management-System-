@@ -1,0 +1,369 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About Us - Student Management System{% endblock %}
+
+{% block extra_css %}
+<style>
+    .feature-icon {
+        font-size: 2.5rem;
+        height: 70px;
+        width: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background-color: rgba(78, 115, 223, 0.1);
+        color: #4e73df;
+        margin-bottom: 1rem;
+    }
+    
+    .feature-list li {
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: flex-start;
+    }
+    
+    .feature-list i {
+        margin-right: 0.75rem;
+        color: #4e73df;
+        margin-top: 0.25rem;
+    }
+    
+    .team-member {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .team-member img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 4px solid #fff;
+        box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        margin-bottom: 1rem;
+    }
+    
+    .timeline {
+        position: relative;
+        padding-left: 2rem;
+    }
+    
+    .timeline:before {
+        content: '';
+        position: absolute;
+        left: 0.75rem;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background-color: #e3e6f0;
+    }
+    
+    .timeline-item {
+        position: relative;
+        padding-bottom: 2rem;
+    }
+    
+    .timeline-item:last-child {
+        padding-bottom: 0;
+    }
+    
+    .timeline-dot {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        left: -2rem;
+        top: 0.25rem;
+        border-radius: 50%;
+        background-color: #4e73df;
+    }
+    
+    .timeline-date {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        background-color: rgba(78, 115, 223, 0.1);
+        color: #4e73df;
+        border-radius: 0.35rem;
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- About Section -->
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">About Student Management System</h6>
+                    <span class="badge bg-primary">Version 2.0</span>
+                </div>
+                <div class="card-body">
+                    <h2 class="mb-4">Who We Are</h2>
+                    <p class="lead">
+                        Student Management System (SMS) is a comprehensive platform designed to streamline educational administration,
+                        enhance communication between students, teachers, and administrators, and improve the overall educational experience.
+                        Our system integrates course management, class scheduling, assignment tracking, student records, and attendance in one unified platform.
+                    </p>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3>Our Mission</h3>
+                            <p>
+                                Our mission is to empower educational institutions with powerful, user-friendly tools that simplify administrative tasks
+                                and allow educators to focus on what matters most - teaching and student development. We strive to create technology
+                                that makes education more accessible, efficient, and effective for all stakeholders.
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h3>Our Vision</h3>
+                            <p>
+                                We envision a future where technology seamlessly integrates with education, making learning more accessible,
+                                administrative tasks more efficient, and educational outcomes more successful. Our platform aims to be the bridge
+                                that connects students, teachers, and administrators in a collaborative educational ecosystem.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Core Features -->
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Core Features</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center mb-4">
+                        <div class="col-md-3 mb-4 mb-md-0">
+                            <div class="mx-auto feature-icon">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <h4>Student Management</h4>
+                            <p>Comprehensive student profiles and academic tracking</p>
+                        </div>
+                        <div class="col-md-3 mb-4 mb-md-0">
+                            <div class="mx-auto feature-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <h4>Course Management</h4>
+                            <p>Organize courses, classes, and academic curricula</p>
+                        </div>
+                        <div class="col-md-3 mb-4 mb-md-0">
+                            <div class="mx-auto feature-icon">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <h4>Assignment Tracking</h4>
+                            <p>Create, distribute, and grade assignments efficiently</p>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mx-auto feature-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h4>Performance Analytics</h4>
+                            <p>Detailed insights into student and class performance</p>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="row">
+                        <div class="col-lg-4 mb-4">
+                            <h5><i class="fas fa-user-graduate text-primary me-2"></i>Student Management</h5>
+                            <ul class="list-unstyled ps-4">
+                                <li><i class="fas fa-check-circle"></i> Comprehensive student profiles</li>
+                                <li><i class="fas fa-check-circle"></i> Academic history tracking</li>
+                                <li><i class="fas fa-check-circle"></i> Attendance monitoring</li>
+                                <li><i class="fas fa-check-circle"></i> Performance analytics</li>
+                                <li><i class="fas fa-check-circle"></i> Parent communication portal</li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4 mb-4">
+                            <h5><i class="fas fa-graduation-cap text-primary me-2"></i>Course & Class Management</h5>
+                            <ul class="list-unstyled ps-4">
+                                <li><i class="fas fa-check-circle"></i> Course catalog and details</li>
+                                <li><i class="fas fa-check-circle"></i> Class scheduling and organization</li>
+                                <li><i class="fas fa-check-circle"></i> Teacher assignments</li>
+                                <li><i class="fas fa-check-circle"></i> Subject management</li>
+                                <li><i class="fas fa-check-circle"></i> Curriculum tracking</li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4 mb-4">
+                            <h5><i class="fas fa-tasks text-primary me-2"></i>Assignment Management</h5>
+                            <ul class="list-unstyled ps-4">
+                                <li><i class="fas fa-check-circle"></i> Assignment creation and distribution</li>
+                                <li><i class="fas fa-check-circle"></i> Online submission system</li>
+                                <li><i class="fas fa-check-circle"></i> Grading and feedback tools</li>
+                                <li><i class="fas fa-check-circle"></i> Due date tracking</li>
+                                <li><i class="fas fa-check-circle"></i> Progress monitoring</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-lg-4 mb-4">
+                            <h5><i class="fas fa-calendar-check text-primary me-2"></i>Attendance System</h5>
+                            <ul class="list-unstyled ps-4">
+                                <li><i class="fas fa-check-circle"></i> Daily attendance tracking</li>
+                                <li><i class="fas fa-check-circle"></i> Automated reporting</li>
+                                <li><i class="fas fa-check-circle"></i> Absence notifications</li>
+                                <li><i class="fas fa-check-circle"></i> Attendance analytics</li>
+                                <li><i class="fas fa-check-circle"></i> Custom reporting options</li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4 mb-4">
+                            <h5><i class="fas fa-chart-line text-primary me-2"></i>Reporting & Analytics</h5>
+                            <ul class="list-unstyled ps-4">
+                                <li><i class="fas fa-check-circle"></i> Performance dashboards</li>
+                                <li><i class="fas fa-check-circle"></i> Progress tracking</li>
+                                <li><i class="fas fa-check-circle"></i> Comparative analysis</li>
+                                <li><i class="fas fa-check-circle"></i> Custom report generation</li>
+                                <li><i class="fas fa-check-circle"></i> Data export options</li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4 mb-4">
+                            <h5><i class="fas fa-bell text-primary me-2"></i>Communication Tools</h5>
+                            <ul class="list-unstyled ps-4">
+                                <li><i class="fas fa-check-circle"></i> Notification system</li>
+                                <li><i class="fas fa-check-circle"></i> Messaging platform</li>
+                                <li><i class="fas fa-check-circle"></i> Announcement broadcasts</li>
+                                <li><i class="fas fa-check-circle"></i> Event calendar</li>
+                                <li><i class="fas fa-check-circle"></i> Mobile alerts</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Team & Development Timeline -->
+    <div class="row">
+        <!-- Our Team -->
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Our Team</h6>
+                </div>
+                <div class="card-body">
+                    <p>
+                        Our team consists of passionate educators, experienced developers, and dedicated administrators who understand the challenges
+                        faced by educational institutions. Together, we've created a system that addresses real-world needs in education management.
+                    </p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="team-member">
+                                <img src="{% static 'images/avatars/principal.jpg' %}" alt="John Doe" onerror="this.src='{% static 'images/avatars/placeholder.svg' %}'">
+                                <h5>John Doe</h5>
+                                <p class="text-muted mb-0">Principal</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="team-member">
+                                <img src="{% static 'images/avatars/vice-principal.jpg' %}" alt="Jane Smith" onerror="this.src='{% static 'images/avatars/placeholder.svg' %}'">
+                                <h5>Jane Smith</h5>
+                                <p class="text-muted mb-0">Vice Principal</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="team-member">
+                                <img src="{% static 'images/avatars/it-admin.jpg' %}" alt="Alex Johnson" onerror="this.src='{% static 'images/avatars/placeholder.svg' %}'">
+                                <h5>Alex Johnson</h5>
+                                <p class="text-muted mb-0">IT Administrator</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="{% url 'contact' %}" class="btn btn-primary">
+                            <i class="fas fa-envelope me-2"></i>Contact Our Team
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Development Timeline -->
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Development Timeline</h6>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-date">January 2023</div>
+                            <h5>Initial Release (v1.0)</h5>
+                            <p>Launch of core student management and attendance tracking features</p>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-date">April 2023</div>
+                            <h5>Course Management Update (v1.5)</h5>
+                            <p>Added comprehensive course catalog and curriculum management features</p>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-date">September 2023</div>
+                            <h5>Assignment System (v1.8)</h5>
+                            <p>Introduced assignment creation, submission, and grading functionality</p>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-date">January 2024</div>
+                            <h5>Performance Analytics (v2.0)</h5>
+                            <p>Added detailed reporting, analytics dashboards, and mobile responsiveness</p>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-date">Coming Soon</div>
+                            <h5>Future Developments</h5>
+                            <p>Mobile app, advanced AI-based analytics, and integration with learning management systems</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Call to Action -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4 bg-gradient-primary text-white">
+                <div class="card-body py-5 text-center">
+                    <h3 class="mb-3">Ready to transform your educational institution?</h3>
+                    <p class="lead mb-4">Join thousands of schools already benefiting from our Student Management System</p>
+                    <div>
+                        <a href="{% url 'contact' %}" class="btn btn-light btn-lg px-4 me-2">
+                            <i class="fas fa-envelope me-2"></i>Contact Us
+                        </a>
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'dashboard' %}" class="btn btn-outline-light btn-lg px-4">
+                            <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                        </a>
+                        {% else %}
+                        <a href="{% url 'register' %}" class="btn btn-outline-light btn-lg px-4">
+                            <i class="fas fa-user-plus me-2"></i>Get Started
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

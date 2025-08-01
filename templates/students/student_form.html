@@ -1,0 +1,438 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if form.instance.pk %}Edit Student{% else %}Add New Student{% endif %} - Student Management System{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Breadcrumb and Title -->
+    <div class="mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'student_list' %}">Students</a></li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    {% if form.instance.pk %}Edit {{ form.instance.user.get_full_name }}{% else %}Add New Student{% endif %}
+                </li>
+            </ol>
+        </nav>
+        <h2 class="h3 mb-0 text-gray-800">
+            {% if form.instance.pk %}
+                Edit Student: {{ form.instance.user.get_full_name }}
+            {% else %}
+                Add New Student
+            {% endif %}
+        </h2>
+        <p class="mb-0 text-muted">
+            {% if form.instance.pk %}
+                Update student information and academic details
+            {% else %}
+                Create a new student record in the system
+            {% endif %}
+        </p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Student Information</h6>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Tabs Navigation -->
+                <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="personal-tab" data-bs-toggle="tab" data-bs-target="#personal" type="button" role="tab" aria-controls="personal" aria-selected="true">
+                            <i class="fas fa-user me-2"></i>Personal Information
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="academic-tab" data-bs-toggle="tab" data-bs-target="#academic" type="button" role="tab" aria-controls="academic" aria-selected="false">
+                            <i class="fas fa-graduation-cap me-2"></i>Academic Information
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">
+                            <i class="fas fa-address-book me-2"></i>Contact & Guardian
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="other-tab" data-bs-toggle="tab" data-bs-target="#other" type="button" role="tab" aria-controls="other" aria-selected="false">
+                            <i class="fas fa-cog me-2"></i>Other Details
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Tabs Content -->
+                <div class="tab-content" id="myTabContent">
+                    <!-- Personal Information Tab -->
+                    <div class="tab-pane fade show active" id="personal" role="tabpanel" aria-labelledby="personal-tab">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="{{ user_form.first_name.id_for_label }}" class="form-label">First Name <span class="text-danger">*</span></label>
+                                    <input type="text" name="{{ user_form.first_name.name }}" id="{{ user_form.first_name.id_for_label }}" class="form-control {% if user_form.first_name.errors %}is-invalid{% endif %}" value="{{ user_form.first_name.value|default:'' }}" required>
+                                    {% if user_form.first_name.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in user_form.first_name.errors %}
+                                        {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="{{ user_form.last_name.id_for_label }}" class="form-label">Last Name <span class="text-danger">*</span></label>
+                                    <input type="text" name="{{ user_form.last_name.name }}" id="{{ user_form.last_name.id_for_label }}" class="form-control {% if user_form.last_name.errors %}is-invalid{% endif %}" value="{{ user_form.last_name.value|default:'' }}" required>
+                                    {% if user_form.last_name.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in user_form.last_name.errors %}
+                                        {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="{{ user_form.email.id_for_label }}" class="form-label">Email <span class="text-danger">*</span></label>
+                                    <input type="email" name="{{ user_form.email.name }}" id="{{ user_form.email.id_for_label }}" class="form-control {% if user_form.email.errors %}is-invalid{% endif %}" value="{{ user_form.email.value|default:'' }}" required>
+                                    {% if user_form.email.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in user_form.email.errors %}
+                                        {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="{{ profile_form.phone_number.id_for_label }}" class="form-label">Phone Number</label>
+                                    <input type="tel" name="{{ profile_form.phone_number.name }}" id="{{ profile_form.phone_number.id_for_label }}" class="form-control {% if profile_form.phone_number.errors %}is-invalid{% endif %}" value="{{ profile_form.phone_number.value|default:'' }}">
+                                    {% if profile_form.phone_number.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in profile_form.phone_number.errors %}
+                                        {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="{{ profile_form.date_of_birth.id_for_label }}" class="form-label">Date of Birth</label>
+                                    <input type="date" name="{{ profile_form.date_of_birth.name }}" id="{{ profile_form.date_of_birth.id_for_label }}" class="form-control {% if profile_form.date_of_birth.errors %}is-invalid{% endif %}" value="{{ profile_form.date_of_birth.value|date:'Y-m-d'|default:'' }}">
+                                    {% if profile_form.date_of_birth.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in profile_form.date_of_birth.errors %}
+                                        {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Gender</label>
+                                    <div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="gender" id="genderMale" value="male" checked>
+                                            <label class="form-check-label" for="genderMale">Male</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="gender" id="genderFemale" value="female">
+                                            <label class="form-check-label" for="genderFemale">Female</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="gender" id="genderOther" value="other">
+                                            <label class="form-check-label" for="genderOther">Other</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="{{ profile_form.address.id_for_label }}" class="form-label">Address</label>
+                                    <textarea name="{{ profile_form.address.name }}" id="{{ profile_form.address.id_for_label }}" class="form-control {% if profile_form.address.errors %}is-invalid{% endif %}" rows="3">{{ profile_form.address.value|default:'' }}</textarea>
+                                    {% if profile_form.address.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in profile_form.address.errors %}
+                                        {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="{{ profile_form.profile_picture.id_for_label }}" class="form-label">Profile Picture</label>
+                                    {% if profile_form.instance.profile_picture %}
+                                        <div class="mb-2">
+                                            <img src="{{ profile_form.instance.profile_picture.url }}" alt="Current Profile Picture" class="img-thumbnail" style="height: 100px;">
+                                        </div>
+                                    {% endif %}
+                                    <input type="file" name="{{ profile_form.profile_picture.name }}" id="{{ profile_form.profile_picture.id_for_label }}" class="form-control {% if profile_form.profile_picture.errors %}is-invalid{% endif %}">
+                                    {% if profile_form.profile_picture.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in profile_form.profile_picture.errors %}
+                                        {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                    {% else %}
+                                    <div class="form-text">Upload a profile picture (optional). Maximum size: 2MB.</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Academic Information Tab -->
+                    <div class="tab-pane fade" id="academic" role="tabpanel" aria-labelledby="academic-tab">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="{{ profile_form.student_id.id_for_label }}" class="form-label">Student ID <span class="text-danger">*</span></label>
+                                    <input type="text" name="{{ profile_form.student_id.name }}" id="{{ profile_form.student_id.id_for_label }}" class="form-control {% if profile_form.student_id.errors %}is-invalid{% endif %}" value="{{ profile_form.student_id.value|default:'' }}" required>
+                                    {% if profile_form.student_id.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in profile_form.student_id.errors %}
+                                        {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="{{ profile_form.admission_date.id_for_label }}" class="form-label">Admission Date</label>
+                                    <input type="date" name="{{ profile_form.admission_date.name }}" id="{{ profile_form.admission_date.id_for_label }}" class="form-control {% if profile_form.admission_date.errors %}is-invalid{% endif %}" value="{{ profile_form.admission_date.value|date:'Y-m-d'|default:'' }}">
+                                    {% if profile_form.admission_date.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in profile_form.admission_date.errors %}
+                                        {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="current_class" class="form-label">Current Class</label>
+                                    <select class="form-select" id="current_class" name="current_class">
+                                        <option value="">Select Class</option>
+                                        <option value="1">Class 9 - Section A</option>
+                                        <option value="2">Class 9 - Section B</option>
+                                        <option value="3">Class 10 - Section A</option>
+                                        <option value="4">Class 10 - Section B</option>
+                                        <option value="5">Class 11 - Section A</option>
+                                        <option value="6">Class 11 - Section B</option>
+                                        <option value="7">Class 12 - Section A</option>
+                                        <option value="8">Class 12 - Section B</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="roll_number" class="form-label">Roll Number</label>
+                                    <input type="text" class="form-control" id="roll_number" name="roll_number">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="previous_school" class="form-label">Previous School</label>
+                                    <input type="text" class="form-control" id="previous_school" name="previous_school">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="academic_status" class="form-label">Academic Status</label>
+                                    <select class="form-select" id="academic_status" name="academic_status">
+                                        <option value="active" selected>Active</option>
+                                        <option value="inactive">Inactive</option>
+                                        <option value="graduated">Graduated</option>
+                                        <option value="transferred">Transferred</option>
+                                        <option value="suspended">Suspended</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact & Guardian Tab -->
+                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="guardian_name" class="form-label">Guardian/Parent Name</label>
+                                    <input type="text" class="form-control" id="guardian_name" name="guardian_name">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="relationship" class="form-label">Relationship</label>
+                                    <select class="form-select" id="relationship" name="relationship">
+                                        <option value="">Select Relationship</option>
+                                        <option value="father">Father</option>
+                                        <option value="mother">Mother</option>
+                                        <option value="guardian">Guardian</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="guardian_phone" class="form-label">Guardian Phone</label>
+                                    <input type="tel" class="form-control" id="guardian_phone" name="guardian_phone">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="guardian_email" class="form-label">Guardian Email</label>
+                                    <input type="email" class="form-control" id="guardian_email" name="guardian_email">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="guardian_occupation" class="form-label">Guardian Occupation</label>
+                                    <input type="text" class="form-control" id="guardian_occupation" name="guardian_occupation">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="emergency_contact" class="form-label">Emergency Contact</label>
+                                    <input type="tel" class="form-control" id="emergency_contact" name="emergency_contact">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="guardian_address" class="form-label">Guardian Address</label>
+                                    <textarea class="form-control" id="guardian_address" name="guardian_address" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Other Details Tab -->
+                    <div class="tab-pane fade" id="other" role="tabpanel" aria-labelledby="other-tab">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="blood_group" class="form-label">Blood Group</label>
+                                    <select class="form-select" id="blood_group" name="blood_group">
+                                        <option value="">Select Blood Group</option>
+                                        <option value="A+">A+</option>
+                                        <option value="A-">A-</option>
+                                        <option value="B+">B+</option>
+                                        <option value="B-">B-</option>
+                                        <option value="AB+">AB+</option>
+                                        <option value="AB-">AB-</option>
+                                        <option value="O+">O+</option>
+                                        <option value="O-">O-</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="religion" class="form-label">Religion</label>
+                                    <input type="text" class="form-control" id="religion" name="religion">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="nationality" class="form-label">Nationality</label>
+                                    <input type="text" class="form-control" id="nationality" name="nationality">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="transport" class="form-label">Transport</label>
+                                    <select class="form-select" id="transport" name="transport">
+                                        <option value="">Select Transport Option</option>
+                                        <option value="school_bus">School Bus</option>
+                                        <option value="private">Private Transport</option>
+                                        <option value="public">Public Transport</option>
+                                        <option value="walking">Walking</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="medical_conditions" class="form-label">Medical Conditions</label>
+                                    <textarea class="form-control" id="medical_conditions" name="medical_conditions" rows="3" placeholder="Any allergies, medical conditions, or medications"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="additional_notes" class="form-label">Additional Notes</label>
+                                    <textarea class="form-control" id="additional_notes" name="additional_notes" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Buttons -->
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" class="btn btn-outline-secondary" onclick="window.history.back();">
+                        <i class="fas fa-arrow-left me-2"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>
+                        {% if form.instance.pk %}Update Student{% else %}Create Student{% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% block extra_scripts %}
+<script>
+    // Activate tab based on URL hash or errors
+    document.addEventListener('DOMContentLoaded', function() {
+        const hash = window.location.hash;
+        if (hash) {
+            const tab = document.querySelector(`a[href="${hash}"]`);
+            if (tab) {
+                tab.click();
+            }
+        }
+        
+        // Check if there are errors in specific tabs
+        const hasPersonalErrors = document.querySelectorAll('#personal .is-invalid').length > 0;
+        const hasAcademicErrors = document.querySelectorAll('#academic .is-invalid').length > 0;
+        const hasContactErrors = document.querySelectorAll('#contact .is-invalid').length > 0;
+        const hasOtherErrors = document.querySelectorAll('#other .is-invalid').length > 0;
+        
+        if (hasAcademicErrors) {
+            document.querySelector('#academic-tab').click();
+        } else if (hasContactErrors) {
+            document.querySelector('#contact-tab').click();
+        } else if (hasOtherErrors) {
+            document.querySelector('#other-tab').click();
+        }
+        
+        // Implement form validation
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %} 

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS Logo Variants Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1, h2 {
+            color: #4e73df;
+        }
+        
+        .demo-section {
+            margin-bottom: 40px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .logo-label {
+            width: 150px;
+            font-weight: bold;
+        }
+        
+        .dark-bg {
+            background-color: #1e2a4a;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            margin-right: 10px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #4e73df;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .responsive-demo {
+            resize: horizontal;
+            overflow: auto;
+            min-width: 300px;
+            max-width: 800px;
+            height: 100px;
+            border: 1px dashed #ccc;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+        }
+        
+        .code-block {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: monospace;
+        }
+        
+        .dark-mode {
+            background-color: #1a1a1a;
+            color: #f5f5f5;
+        }
+        
+        .dark-mode .code-block {
+            background-color: #2a2a2a;
+            color: #f0f0f0;
+        }
+        
+        .logo-light, .logo-small-light {
+            display: block;
+        }
+        
+        .logo-dark, .logo-small-dark {
+            display: none;
+        }
+        
+        .dark-mode .logo-light, .dark-mode .logo-small-light {
+            display: none;
+        }
+        
+        .dark-mode .logo-dark, .dark-mode .logo-small-dark {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Student Management System Logo Variants</h1>
+    
+    <div class="toggle-container">
+        <label class="toggle-switch">
+            <input type="checkbox" id="darkModeToggle">
+            <span class="slider"></span>
+        </label>
+        <span>Toggle Dark Mode</span>
+    </div>
+    
+    <div class="demo-section">
+        <h2>Standard Logos</h2>
+        
+        <div class="logo-container">
+            <div class="logo-label">Main Logo:</div>
+            <div>
+                <img src="logo.svg" alt="SMS Logo" height="40" class="logo-light">
+                <img src="logo-dark.svg" alt="SMS Logo Dark" height="40" class="logo-dark">
+            </div>
+        </div>
+        
+        <div class="logo-container">
+            <div class="logo-label">Small Logo:</div>
+            <div>
+                <img src="logo-small.svg" alt="SMS Small Logo" height="40" class="logo-small-light">
+                <img src="logo-small-dark.svg" alt="SMS Small Logo Dark" height="40" class="logo-small-dark">
+            </div>
+        </div>
+        
+        <div class="code-block">
+            &lt;img src="logo.svg" alt="Student Management System" height="40"&gt;
+        </div>
+    </div>
+    
+    <div class="demo-section">
+        <h2>Responsive Logo Example</h2>
+        <p>Resize the box below to see the logo change based on width:</p>
+        
+        <div class="responsive-demo" id="responsiveDemo">
+            <picture>
+                <source media="(max-width: 576px)" srcset="logo-small.svg">
+                <source media="(min-width: 577px)" srcset="logo.svg">
+                <img src="logo.svg" alt="Student Management System" height="40">
+            </picture>
+        </div>
+        
+        <p>Current width: <span id="currentWidth">0</span>px</p>
+        
+        <div class="code-block">
+            &lt;picture&gt;<br>
+            &nbsp;&nbsp;&lt;source media="(max-width: 576px)" srcset="logo-small.svg"&gt;<br>
+            &nbsp;&nbsp;&lt;source media="(min-width: 577px)" srcset="logo.svg"&gt;<br>
+            &nbsp;&nbsp;&lt;img src="logo.svg" alt="Student Management System" height="40"&gt;<br>
+            &lt;/picture&gt;
+        </div>
+    </div>
+    
+    <div class="demo-section dark-bg">
+        <h2>Dark Background Usage</h2>
+        
+        <div class="logo-container">
+            <div class="logo-label">Main Logo:</div>
+            <div>
+                <img src="logo-dark.svg" alt="SMS Logo for Dark Background" height="40">
+            </div>
+        </div>
+        
+        <div class="logo-container">
+            <div class="logo-label">Small Logo:</div>
+            <div>
+                <img src="logo-small-dark.svg" alt="SMS Small Logo for Dark Background" height="40">
+            </div>
+        </div>
+        
+        <div class="code-block">
+            &lt;img src="logo-dark.svg" alt="Student Management System" height="40"&gt;
+        </div>
+    </div>
+    
+    <div class="demo-section">
+        <h2>Mobile Header Example</h2>
+        
+        <div style="width: 320px; padding: 10px; border: 1px solid #ccc; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <img src="logo-small.svg" alt="SMS" width="40" height="40" class="logo-small-light">
+                <img src="logo-small-dark.svg" alt="SMS" width="40" height="40" class="logo-small-dark">
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <div style="width: 20px; height: 2px; background: #333;"></div>
+                <div style="width: 20px; height: 2px; background: #333;"></div>
+                <div style="width: 20px; height: 2px; background: #333;"></div>
+            </div>
+        </div>
+        
+        <div class="code-block">
+            &lt;div class="mobile-header"&gt;<br>
+            &nbsp;&nbsp;&lt;img src="logo-small.svg" alt="SMS" width="40" height="40"&gt;<br>
+            &nbsp;&nbsp;&lt;button class="navbar-toggler"&gt;&lt;/button&gt;<br>
+            &lt;/div&gt;
+        </div>
+    </div>
+    
+    <script>
+        // Dark mode toggle
+        document.getElementById('darkModeToggle').addEventListener('change', function() {
+            document.body.classList.toggle('dark-mode', this.checked);
+        });
+        
+        // Display responsive demo width
+        const responsiveDemo = document.getElementById('responsiveDemo');
+        const currentWidth = document.getElementById('currentWidth');
+        
+        function updateWidth() {
+            currentWidth.textContent = responsiveDemo.offsetWidth;
+        }
+        
+        // Set up resize observer
+        const resizeObserver = new ResizeObserver(updateWidth);
+        resizeObserver.observe(responsiveDemo);
+        
+        // Initial width
+        updateWidth();
+    </script>
+</body>
+</html>

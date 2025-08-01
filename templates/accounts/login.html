@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Login - Student Management System{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-header bg-gradient-primary">
+                    <div class="text-center my-3">
+                        <img src="{% static 'images/logo/logo-dark.svg' %}" alt="SMS Logo" class="img-fluid mb-3" style="max-height: 50px;">
+                        <h3 class="text-white font-weight-light">Welcome Back</h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form method="POST" class="user">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label class="small mb-1" for="id_username">Username</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input type="text" name="username" class="form-control" id="id_username" placeholder="Enter your username" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="small mb-1" for="id_password">Password</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                </div>
+                                <input type="password" name="password" class="form-control" id="id_password" placeholder="Enter your password" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" id="rememberPasswordCheck" type="checkbox" name="remember">
+                                <label class="custom-control-label" for="rememberPasswordCheck">Remember me</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                            <a class="small" href="{% url 'password_reset' %}">Forgot Password?</a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-sign-in-alt mr-2"></i>Login
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center py-3">
+                    <div class="small">
+                        <a href="{% url 'register' %}">Need an account? Sign up!</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

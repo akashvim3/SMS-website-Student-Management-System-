@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Student Management System{% endblock %}</title>
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'images/logo/favicon.ico' %}" sizes="any">
+    <link rel="icon" href="{% static 'images/logo/logo-small.svg' %}" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="{% static 'images/logo/apple-touch-icon.png' %}">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --primary-dark: #2e59d9;
+            --secondary-color: #5a5c69;
+            --success-color: #1cc88a;
+            --info-color: #36b9cc;
+            --warning-color: #f6c23e;
+            --danger-color: #e74a3b;
+            --light-color: #f8f9fc;
+            --dark-color: #343a40;
+        }
+        
+        body {
+            background-color: #f8f9fc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        .navbar {
+            background-color: #fff !important;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            padding: 0.5rem 1rem;
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            color: var(--dark-color) !important;
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 0.5rem;
+        }
+        
+        .nav-link {
+            color: var(--secondary-color) !important;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+        
+        .nav-link.active {
+            color: var(--primary-color) !important;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 30px 0;
+        }
+        
+        .card {
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            transition: all 0.3s;
+            border-radius: 0.35rem;
+            border: 1px solid #e3e6f0;
+        }
+        
+        .card:hover {
+            box-shadow: 0 0.5rem 2rem 0 rgba(58, 59, 69, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        .card-header {
+            background-color: #f8f9fc;
+            color: var(--secondary-color);
+            border-bottom: 1px solid #e3e6f0;
+            font-weight: bold;
+            padding: 0.75rem 1.25rem;
+        }
+        
+        .bg-gradient-primary {
+            background: linear-gradient(180deg, #4e73df 10%, #2e59d9 100%);
+            color: white;
+        }
+        
+        .bg-gradient-success {
+            background: linear-gradient(180deg, #1cc88a 10%, #13855c 100%);
+            color: white;
+        }
+        
+        .bg-gradient-info {
+            background: linear-gradient(180deg, #36b9cc 10%, #258391 100%);
+            color: white;
+        }
+        
+        .bg-gradient-warning {
+            background: linear-gradient(180deg, #f6c23e 10%, #dda20a 100%);
+            color: white;
+        }
+        
+        .footer {
+            background-color: #fff;
+            color: var(--secondary-color);
+            padding: 20px 0;
+            margin-top: auto;
+            border-top: 1px solid #e3e6f0;
+        }
+        
+        /* Dashboard stats */
+        .stat-card {
+            padding: 1.5rem;
+            border-radius: 0.35rem;
+            margin-bottom: 1.5rem;
+            border-left: 0.25rem solid var(--primary-color);
+        }
+        
+        .stat-card.border-left-primary {
+            border-left-color: var(--primary-color);
+        }
+        
+        .stat-card.border-left-success {
+            border-left-color: var(--success-color);
+        }
+        
+        .stat-card.border-left-info {
+            border-left-color: var(--info-color);
+        }
+        
+        .stat-card.border-left-warning {
+            border-left-color: var(--warning-color);
+        }
+        
+        /* Custom form styles */
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
+            .navbar-brand span {
+                display: none;
+            }
+            
+            .stat-card {
+                margin-bottom: 1rem;
+            }
+        }
+        
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            body.dark-theme {
+                background-color: #1e2130;
+                color: #e0e0e0;
+            }
+            
+            body.dark-theme .navbar,
+            body.dark-theme .card,
+            body.dark-theme .footer {
+                background-color: #283046 !important;
+                color: #e0e0e0;
+            }
+            
+            body.dark-theme .card-header {
+                background-color: #222a3f;
+                border-bottom: 1px solid #37405e;
+            }
+            
+            body.dark-theme .nav-link {
+                color: #d0d2d6 !important;
+            }
+            
+            body.dark-theme .form-control {
+                background-color: #283046;
+                border-color: #444b60;
+                color: #e0e0e0;
+            }
+        }
+        
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <!-- Responsive logo handling -->
+                <picture>
+                    <source media="(max-width: 576px)" srcset="{% static 'images/logo/logo-small.svg' %}">
+                    <source media="(min-width: 577px)" srcset="{% static 'images/logo/logo.svg' %}">
+                    <img src="{% static 'images/logo/logo.svg' %}" alt="Student Management System" height="40">
+                </picture>
+                <span class="d-none d-md-inline">Student Management System</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'home' %}">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'dashboard' in request.path %}active{% endif %}" href="{% url 'dashboard' %}">
+                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    
+                    <!-- Enhanced Academic Management Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% if 'academics' in request.path or 'course' in request.path or 'class' in request.path %}active{% endif %}" href="#" id="academicsDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-graduation-cap me-1"></i>Academics
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="academicsDropdown">
+                            <li><h6 class="dropdown-header">Course Management</h6></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-book-open fa-fw me-2"></i>View All Courses</a></li>
+                            {% if user.is_staff %}
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-plus-circle fa-fw me-2"></i>Add New Course</a></li>
+                            {% endif %}
+                            <li><hr class="dropdown-divider"></li>
+                            
+                            <li><h6 class="dropdown-header">Class Management</h6></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-chalkboard fa-fw me-2"></i>View All Classes</a></li>
+                            {% if user.is_staff %}
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-plus-circle fa-fw me-2"></i>Add New Class</a></li>
+                            {% endif %}
+                            <li><hr class="dropdown-divider"></li>
+                            
+                            <li><h6 class="dropdown-header">Subject Management</h6></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-book fa-fw me-2"></i>View All Subjects</a></li>
+                            {% if user.is_staff %}
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-plus-circle fa-fw me-2"></i>Add New Subject</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    
+                    <!-- Assignment Management -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% if 'assignment' in request.path %}active{% endif %}" href="#" id="assignmentDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-tasks me-1"></i>Assignments
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="assignmentDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-list fa-fw me-2"></i>All Assignments</a></li>
+                            {% if user.is_staff or user.userprofile.user_type == 'teacher' %}
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-plus-circle fa-fw me-2"></i>Create Assignment</a></li>
+                            {% endif %}
+                            {% if user.userprofile.user_type == 'student' %}
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-clipboard-check fa-fw me-2"></i>My Assignments</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-calendar-alt fa-fw me-2"></i>Due Assignments</a></li>
+                            {% endif %}
+                            {% if user.is_staff or user.userprofile.user_type == 'teacher' %}
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-star fa-fw me-2"></i>Grade Assignments</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% if 'attendance' in request.path %}active{% endif %}" href="#" id="attendanceDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-calendar-check me-1"></i>Attendance
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-list fa-fw me-2"></i>Attendance Records</a></li>
+                            {% if user.is_staff or user.userprofile.user_type == 'teacher' %}
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-check fa-fw me-2"></i>Take Attendance</a></li>
+                            {% endif %}
+                            {% if user.userprofile.user_type == 'student' %}
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-clipboard-list fa-fw me-2"></i>My Attendance</a></li>
+                            {% endif %}
+                            {% if user.is_staff %}
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-chart-bar fa-fw me-2"></i>Attendance Reports</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    
+                    <!-- Student Management -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% if 'student' in request.path or 'users' in request.path %}active{% endif %}" href="#" id="usersDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-users me-1"></i>People
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="usersDropdown">
+                            <li><h6 class="dropdown-header">Student Management</h6></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-graduate fa-fw me-2"></i>All Students</a></li>
+                            {% if user.is_staff %}
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-plus fa-fw me-2"></i>Add New Student</a></li>
+                            {% endif %}
+                            <li><hr class="dropdown-divider"></li>
+                            
+                            <li><h6 class="dropdown-header">Staff Management</h6></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-chalkboard-teacher fa-fw me-2"></i>All Teachers</a></li>
+                            {% if user.is_staff %}
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-shield fa-fw me-2"></i>Administrators</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'about' in request.path %}active{% endif %}" href="{% url 'about' %}">
+                            <i class="fas fa-info-circle me-1"></i>About
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'calendar' in request.path %}active{% endif %}" href="{% url 'calendar' %}">
+                            <i class="fas fa-calendar-alt me-1"></i>Calendar
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'contact' in request.path %}active{% endif %}" href="{% url 'contact' %}">
+                            <i class="fas fa-envelope me-1"></i>Contact
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav ms-auto">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="#" id="notificationsDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-bell fa-fw"></i>
+                            <!-- Notification Counter -->
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                8
+                                <span class="visually-hidden">unread notifications</span>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown" style="width: 300px;">
+                            <li>
+                                <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
+                                    <h6 class="mb-0">Notifications</h6>
+                                    <a href="{% url 'notifications' %}" class="text-primary small">View All</a>
+                                </div>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex py-2" href="#">
+                                    <div class="me-3 text-primary">
+                                        <i class="fas fa-graduation-cap"></i>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">Today</div>
+                                        New Course Registration Open
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex py-2" href="#">
+                                    <div class="me-3 text-warning">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">Yesterday</div>
+                                        Fee Payment Reminder
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex py-2" href="#">
+                                    <div class="me-3 text-success">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">2 days ago</div>
+                                        Assignment Graded
+                                    </div>
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <div class="text-center py-2">
+                                    <a href="{% url 'notifications' %}" class="btn btn-sm btn-primary">
+                                        See All Notifications
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle me-1"></i>{{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="{% url 'profile' %}">
+                                <i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>Profile
+                            </a></li>
+                            <li><a class="dropdown-item" href="{% url 'profile_update' %}">
+                                <i class="fas fa-cogs fa-sm fa-fw me-2 text-gray-400"></i>Edit Profile
+                            </a></li>
+                            <li><a class="dropdown-item" href="{% url 'password_change' %}">
+                                <i class="fas fa-key fa-sm fa-fw me-2 text-gray-400"></i>Change Password
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>Logout
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <button id="darkModeToggle" class="btn btn-link nav-link">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'login' in request.path %}active{% endif %}" href="{% url 'login' %}">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'register' in request.path %}active{% endif %}" href="{% url 'register' %}">
+                            <i class="fas fa-user-plus me-1"></i>Register
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <button id="darkModeToggle" class="btn btn-link nav-link">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container fade-in">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="{% static 'images/logo/logo-small.svg' %}" alt="SMS Logo" height="30" class="me-2">
+                        <h5 class="mb-0">Student Management System</h5>
+                    </div>
+                    <p>A comprehensive solution for managing student information, attendance, and academic performance.</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'home' %}" class="text-secondary">Home</a></li>
+                        <li><a href="{% url 'about' %}" class="text-secondary">About</a></li>
+                        <li><a href="{% url 'calendar' %}" class="text-secondary">Calendar</a></li>
+                        <li><a href="{% url 'contact' %}" class="text-secondary">Contact</a></li>
+                        {% if user.is_authenticated %}
+                        <li><a href="{% url 'dashboard' %}" class="text-secondary">Dashboard</a></li>
+                        {% else %}
+                        <li><a href="{% url 'login' %}" class="text-secondary">Login</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Connect With Us</h5>
+                    <div class="d-flex">
+                        <a href="#" class="text-secondary me-3"><i class="fab fa-facebook-f fa-lg"></i></a>
+                        <a href="#" class="text-secondary me-3"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-secondary me-3"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-secondary"><i class="fab fa-linkedin-in fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p class="mb-0">&copy; {% now "Y" %} Student Management System. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Dark Mode Toggle -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const body = document.body;
+            
+            // Check for saved user preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                body.classList.toggle('dark-theme', savedTheme === 'dark');
+                updateIcon(savedTheme === 'dark');
+            }
+            
+            // Toggle dark mode
+            darkModeToggle.addEventListener('click', function() {
+                const isDark = body.classList.toggle('dark-theme');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                updateIcon(isDark);
+            });
+            
+            function updateIcon(isDark) {
+                const icon = darkModeToggle.querySelector('i');
+                if (isDark) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                }
+            }
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 
